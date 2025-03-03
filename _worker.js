@@ -24,7 +24,6 @@ export default {
 
       // 从请求路径中提取目标 URL
       let actualUrlStr = decodeURIComponent(url.pathname.replace("/", ""));
-
       // 判断用户输入的 URL 是否带有协议
       actualUrlStr = ensureProtocol(actualUrlStr, url.protocol);
 
@@ -32,7 +31,10 @@ export default {
       actualUrlStr += url.search;
 
       // 创建新 Headers 对象，排除以 'cf-' 开头的请求头
-      const newHeaders = filterHeaders(request.headers, (name) => !name.startsWith("cf-"));
+      const newHeaders = filterHeaders(
+        request.headers,
+        (name) => !name.startsWith("cf-") || name === "Host",
+      );
 
       // 创建一个新的请求以访问目标 URL
       const modifiedRequest = new Request(actualUrlStr, {
